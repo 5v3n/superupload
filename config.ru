@@ -1,3 +1,3 @@
 require './app/super_upload.rb'
 
-run SuperUpload.new
+run SuperUpload::App.new

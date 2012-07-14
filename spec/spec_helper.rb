@@ -11,6 +11,6 @@ RSpec.configure do |conf|
   set :environment, :test
 
   def app
-    SuperUpload
+    SuperUpload::App
   end
 end
