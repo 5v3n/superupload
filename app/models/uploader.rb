@@ -1,10 +1,12 @@
 module SuperUpload
   class Uploader
-    def self.process(filename, tempfile)
-      File.open("#{SuperUpload::UPLOAD_PATH}/#{filename}", "w") do |f|
-        f.write(tempfile.read)
+    attr_accessor :progress
+    def self.process(filename, tmpfile)
+      full_path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"
+      File.open(full_path, "wb") do |f|
+        f.write(tmpfile.read)
       end
-      "#{SuperUpload::UPLOAD_PATH}/#{filename}"
+      full_path
     end
   end
 end
