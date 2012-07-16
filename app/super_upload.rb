@@ -5,6 +5,7 @@ require "./app/models/uploader.rb"
 module SuperUpload
   
   UPLOAD_PATH = 'public/uploads/files'
+  BUFFER_SIZE = 4096
   ERROR_MESSAGES = {
       :missing_parameters => 'Missing parameter(s)'
     }
@@ -20,7 +21,7 @@ module SuperUpload
       erb :new
     end
     post "/uploads" do
-      SuperUpload::UploadsController.create params, response
+      SuperUpload::UploadsController.create params, request, response
     end
     get "/progress" do
       SuperUpload::UploadsController.progress params, response

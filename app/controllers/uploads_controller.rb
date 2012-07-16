@@ -1,11 +1,10 @@
 module SuperUpload
   module UploadsController
     
-    def self.create(params, response)
+    def self.create(params, request, response)
       if params && params['file'] && params['file'] != ""
-        filename = params['file'][:filename] 
         begin
-          response["Location"] = SuperUpload::Uploader.process filename, params['file'][:tempfile]
+          response["Location"] = SuperUpload::Uploader.process params, request, response
           201
         rescue => err
           p err
