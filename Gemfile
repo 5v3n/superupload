@@ -1,6 +1,5 @@
 source :rubygems
 
-gem 'sinatra'
 gem 'foreman'
 gem 'unicorn'
 
@@ -10,6 +9,6 @@ group :test do
   gem 'capybara'
 end
 
-group :dvelopment do
+group :development do
   gem 'shotgun'
 end

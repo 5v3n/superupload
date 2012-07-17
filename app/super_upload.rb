@@ -1,4 +1,3 @@
-require "sinatra"
 require "./app/controllers/uploads_controller.rb"
 require "./app/models/uploader.rb"
 require "./app/models/file_manager.rb"
