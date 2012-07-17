@@ -1,3 +1,5 @@
+window.SuperUpload = window.SuperUpload || {};
+
 $(document).ready(function() {
   var form = $('.js-upload-form');
   var sid = new Date().getTime();
@@ -16,17 +18,18 @@ $(document).ready(function() {
             .appendTo('.js-upload-form');
     $('.js-status').text('');
     $('.js-file-upload-progress').text('starting upload...');
-    updateUploadProgress();
+    window.SuperUpload.updateUploadProgress(sid);
   });
+});
 
-  var updateUploadProgress = function() {
+window.SuperUpload.updateUploadProgress = function(sid) {
     console.log('checking progress...');
     // check upload progess
     $.get('/progress', {'uid': sid}, function(data) {
-      console.log('data'+data);
+      console.log(data);
       if(data.progress < 100) {
         if(data.progress) $('.js-file-upload-progress').text('uploading... ' + data.progress + '%');
-        setTimeout('updateUploadProgress()',500);
+        setTimeout('window.SuperUpload.updateUploadProgress()',500);
         return true;
       }
       // if progress indicates upload complete, file info
@@ -34,4 +37,3 @@ $(document).ready(function() {
       $('.js-file-upload-progress').text('');
     }, 'json');
   };
-});

@@ -1,3 +1,4 @@
+$LOAD_PATH << './lib'
 $LOAD_PATH << './app'
 $LOAD_PATH << './app/models'
 $LOAD_PATH << './app/controllers'
@@ -22,9 +23,9 @@ map '/uploads' do
 end
 
 map '/' do
-  run Proc.new { [ 302, {'Content-Type' => 'text/html', 'Location'=> '/uploads/new' }, [] ] }
+  run Proc.new {|env| [ 302, {'Content-Type' => 'text/html', 'Location'=> '/uploads/new' }, [] ] }
 end
 
 map '/progress' do
-  run Proc.new {|env| [200, {"Content-Type" => "application/json"}, ["{'progress': 'mocked!!!'}"] ] }
+  run Proc.new {|env| [200, {"Content-Type" => "application/json"}, ["{\"progress\": 100}"] ] }
 end
