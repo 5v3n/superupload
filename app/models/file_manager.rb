@@ -10,5 +10,8 @@ module SuperUpload
     def path
       @path || @path = {}
     end
+    # class << self; attr_accessor :upload_progress, :path end
+    # @upload_progress = Hash.new
+    # @path = Hash.new
   end
 end

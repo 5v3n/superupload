@@ -9,13 +9,11 @@ $(document).ready(function() {
   });
 
   form.submit(function() {
-    //'upload-target' is the name of the iframe
-    document.getElementById('file-upload-form').target = 'upload-target'; 
-    //add hidden field for params
-    $('<input />').attr('type', 'hidden')
-            .attr('name', 'sid')
-            .attr('value', sid)
-            .appendTo('.js-upload-form');
+    var fileName = 'xyz_' + sid;
+    //use hidden iframe for upload
+    $('#file-upload-form').attr('target', 'upload-target'); 
+    //add sid to action
+    $(this).attr('action', '/uploads?sid=' + sid + '&filename=' + fileName);
     $('.js-status').text('');
     $('.js-file-upload-progress').text('starting upload...');
     window.SuperUpload.updateUploadProgress(sid);
@@ -23,13 +21,14 @@ $(document).ready(function() {
 });
 
 window.SuperUpload.updateUploadProgress = function(sid) {
-    console.log('checking progress...');
+    console.log('checking progress for sid ' + sid + '...');
     // check upload progess
-    $.get('/progress', {'uid': sid}, function(data) {
+    $.get('/progress?sid=' + sid, function(data) {
       console.log(data);
-      if(data.progress < 100) {
-        if(data.progress) $('.js-file-upload-progress').text('uploading... ' + data.progress + '%');
-        setTimeout('window.SuperUpload.updateUploadProgress()',500);
+      var progress = data.progress || 0
+      if(progress < 100) {
+        if(progress) $('.js-file-upload-progress').text('uploading... ' + progress + '%');
+        setTimeout('window.SuperUpload.updateUploadProgress('+sid+')',500);
         return true;
       }
       // if progress indicates upload complete, file info

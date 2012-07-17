@@ -8,13 +8,9 @@ module SuperUpload
       #the_other_way rack_env
     end
     def self.this_way(env)
-      #request.body.rewind  # in case someone already read it
       params = CGI.parse(env["QUERY_STRING"])
-      puts "*************** Uploader: CGI.parse(env[\"QUERY_STRING\"]"
-      p params
-      filename = "xyz"#params["file"][:filename]
-      sid = params["sid"]
-      p env["CONTENT_LENGTH"]
+      filename = params["filename"].first
+      sid = params["sid"].first
       total_size = env["CONTENT_LENGTH"].to_i
       current_position = 0
       body = ""
@@ -30,7 +26,7 @@ module SuperUpload
       File.open(path, "wb") do |file|
         file.write body
       end
-      SuperUpload::FileManager.instance.path[sid] = path 
+      SuperUpload::FileManager.instance.path[sid] = path
       p SuperUpload::FileManager.instance
       path
     end
