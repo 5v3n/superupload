@@ -1,4 +1,5 @@
 require './app/models/file_manager.rb'
+require 'cgi'
 
 module SuperUpload
   class Uploader
@@ -8,17 +9,17 @@ module SuperUpload
     end
     def self.this_way(env)
       #request.body.rewind  # in case someone already read it
-      rack_input = env['rack.input']
-      request = Rack::Request.new(env)
-      params = request.params
+      params = CGI.parse(env["QUERY_STRING"])
+      puts "*************** Uploader: CGI.parse(env[\"QUERY_STRING\"]"
       p params
-      filename = params["file"][:filename]
-      sid = params[:sid]
-      total_size = request.content_length.to_i
+      filename = "xyz"#params["file"][:filename]
+      sid = params["sid"]
+      p env["CONTENT_LENGTH"]
+      total_size = env["CONTENT_LENGTH"].to_i
       current_position = 0
       body = ""
       SuperUpload::FileManager.instance.upload_progress[sid] = 0
-      while chunk = rack_input.read(SuperUpload::BUFFER_SIZE)
+      while chunk = env['rack.input'].read(SuperUpload::BUFFER_SIZE)
         body << chunk
         current_position += SuperUpload::BUFFER_SIZE
         progress = (( (1.0 * current_position) / total_size) * 100).to_i

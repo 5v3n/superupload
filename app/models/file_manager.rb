@@ -8,7 +8,7 @@ module SuperUpload
       @upload_progress || @upload_progress = {}
     end
     def path
-      @path || @upload_progress = {}
+      @path || @path = {}
     end
   end
 end

@@ -10,8 +10,8 @@ use Rack::Static, :urls => ["/stylesheets", "/javascripts", "/uploads/files"], :
 map '/uploads' do
   map '/' do
     run Proc.new { |env| 
-      request = Rack::Request.new(env)
-      if request.post?
+      p env
+      if env["REQUEST_METHOD"] == "POST"
         SuperUpload::UploadsController.create env
       end
     }
@@ -22,5 +22,9 @@ map '/uploads' do
 end
 
 map '/' do
-  run Proc.new { [ 302, {'Location'=> '/uploads/new' }, [] ] }
+  run Proc.new { [ 302, {'Content-Type' => 'text/html', 'Location'=> '/uploads/new' }, [] ] }
+end
+
+map '/progress' do
+  run Proc.new {|env| [200, {"Content-Type" => "application/json"}, ["{'progress': 'mocked!!!'}"] ] }
 end

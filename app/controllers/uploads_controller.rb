@@ -1,8 +1,8 @@
 module SuperUpload
   module UploadsController
     def self.create(env)
-      params = Rack::Request.new(env).params
-      if params && params['file'] && params['file'] != ""
+      #params = Rack::Request.new(env).params
+      if true#params && params['file'] && params['file'] != ""
         begin
           location = SuperUpload::Uploader.process env
           [201, {"Content-Type" => "text/html", "Location" => location}, ["Upload is complete, post created..."] ]

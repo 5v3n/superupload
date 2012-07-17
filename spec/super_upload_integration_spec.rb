@@ -12,7 +12,7 @@ describe "Super Upload" do
 
     it "indicates a succesfully completed upload", :js => :true do
       #attach_file("file", full_file_path) #won't help in non-headless selenium mode...
-      find("#file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload.txt", './'))
+      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload.txt", './'))
       #click_button("Upload")
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
