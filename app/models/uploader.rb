@@ -1,48 +1,37 @@
-require 'CGI'
-require 'webrick/httputils'
+require './app/models/file_manager.rb'
 
 module SuperUpload
   class Uploader
-    def self.process(params, request, response)
-      # request.body.rewind  # in case someone already read it
-      # filename = params[:file][:filename]
-      # tmp_file = params[:tmpfile]
-      # position = 0
-      # total_size = request.content_length.to_i
-      # path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"
-      # File.open(path, "wb") do |buff|
-      #   while blk = request.body.read(SuperUpload::BUFFER_SIZE)
-      #     buff.write(blk)
-      #     position += SuperUpload::BUFFER_SIZE
-      #     #puts "#{position} / #{total_size} = #{(((1.0 * position) / total_size) * 100).to_i}"
-      #   end
-      # end 
-      # path
-      # check that we've received file data to upload
-    
-    upload_progress = 0
-    total = request.content_length.to_f
-    current_position = 0
-    body = String.new
-    request.body.each do |chunk|
-      current_position = current_position + chunk.length.to_f
-      progress = ((current_position / total) * 100).to_i
-      #puts progress
-      upload_progress = progress
-      body << chunk
+    def self.process(env)
+      this_way env
+      #the_other_way rack_env
     end
-    # parse body of request and raise error if file data is empty
-    boundary = request.env["CONTENT_TYPE"].match(/^multipart\/form-data; boundary=(.+)/)[1]
-    boundary = WEBrick::HTTPUtils::dequote(boundary)
-    filedata = WEBrick::HTTPUtils::parse_form_data(body, boundary)
-    filename = params['file'][:filename]
-    File.open(SuperUpload::UPLOAD_PATH + '/' + filename,'wb') do |f|
-      f.write body
-    end 
-    f = File.new(SuperUpload::UPLOAD_PATH + '/' + filename,'wb')
-    f.syswrite filedata['file']
-    f.close
-    upload_file = f.path
+    def self.this_way(env)
+      #request.body.rewind  # in case someone already read it
+      rack_input = env['rack.input']
+      request = Rack::Request.new(env)
+      params = request.params
+      p params
+      filename = params["file"][:filename]
+      sid = params[:sid]
+      total_size = request.content_length.to_i
+      current_position = 0
+      body = ""
+      SuperUpload::FileManager.instance.upload_progress[sid] = 0
+      while chunk = rack_input.read(SuperUpload::BUFFER_SIZE)
+        body << chunk
+        current_position += SuperUpload::BUFFER_SIZE
+        progress = (( (1.0 * current_position) / total_size) * 100).to_i
+        SuperUpload::FileManager.instance.upload_progress[sid] = progress
+        puts "#{current_position} / #{total_size} = #{progress}"
+      end
+      path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"
+      File.open(path, "wb") do |file|
+        file.write body
+      end
+      SuperUpload::FileManager.instance.path[sid] = path 
+      p SuperUpload::FileManager.instance
+      path
     end
   end
 end

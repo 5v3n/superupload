@@ -9,3 +9,7 @@ group :test do
   gem 'rack-test'
   gem 'capybara'
 end
+
+group :dvelopment do
+  gem 'shotgun'
+end

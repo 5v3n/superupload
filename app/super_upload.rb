@@ -1,31 +1,12 @@
 require "sinatra"
 require "./app/controllers/uploads_controller.rb"
 require "./app/models/uploader.rb"
+require "./app/models/file_manager.rb"
 
 module SuperUpload
-  
   UPLOAD_PATH = 'public/uploads/files'
   BUFFER_SIZE = 4096
   ERROR_MESSAGES = {
       :missing_parameters => 'Missing parameter(s)'
     }
-  
-  class App < Sinatra::Application
-    set :public_folder, 'public'
-    set :views, settings.root + '/views'
-    get '/' do
-      redirect "/uploads/new"
-    end
-    get "/uploads/new" do
-      #SuperUpload::UploadsController.new params, response
-      erb :new
-    end
-    post "/uploads" do
-      SuperUpload::UploadsController.create params, request, response
-    end
-    get "/progress" do
-      SuperUpload::UploadsController.progress params, response
-    end
-  end
-
 end

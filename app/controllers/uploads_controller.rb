@@ -1,18 +1,17 @@
 module SuperUpload
   module UploadsController
-    
-    def self.create(params, request, response)
+    def self.create(env)
+      params = Rack::Request.new(env).params
       if params && params['file'] && params['file'] != ""
         begin
-          response["Location"] = SuperUpload::Uploader.process params, request, response
-          201
+          location = SuperUpload::Uploader.process env
+          [201, {"Content-Type" => "text/html", "Location" => location}, ["Upload is complete, post created..."] ]
         rescue => err
           p err
-          409 #TODO handle with appropriate codes to the specific situations here... 
+          [409, {"Content-Type" => "text/html"}, ["something went wrong..."] ] #TODO handle with appropriate codes to the specific situations here... 
         end
       else
-        response["Warning"] = "#{ERROR_MESSAGES[:missing_parameters]}: no filename given."
-        400
+        [400, {"Content-Type" => "text/html", "Warning" => "#{ERROR_MESSAGES[:missing_parameters]}: no filename given."}, ["#{ERROR_MESSAGES[:missing_parameters]}: no filename given."] ]
       end
     end
   end

@@ -16,10 +16,10 @@ RSpec.configure do |conf|
   
   Capybara.javascript_driver = :selenium
   Capybara.default_wait_time = 10
-  Capybara.app = SuperUpload::App.new
+  Capybara.app = eval "Rack::Builder.new {( " + File.read(File.dirname(__FILE__) + '/../config.ru') + "\n )}" 
 
   def app
-    SuperUpload::App
+    eval "Rack::Builder.new {( " + File.read(File.dirname(__FILE__) + '/../config.ru') + "\n )}"
   end
 
 end
