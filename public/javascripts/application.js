@@ -1,32 +1,37 @@
 $(document).ready(function() {
   var form = $('.js-upload-form');
-  var sid = '1234'
+  var sid = new Date().getTime();
   //submit form when file has been selected
-  $('#file-upload-input').on('change', function(){
+  $('.js-file-upload-input').on('change', function(){
     form.submit();
   });
 
   form.submit(function() {
-    console.log(this);
+    //'upload-target' is the name of the iframe
+    document.getElementById('file-upload-form').target = 'upload-target'; 
     //add hidden field for params
     $('<input />').attr('type', 'hidden')
-            .attr('sid', sid)
+            .attr('name', 'sid')
+            .attr('value', sid)
             .appendTo('.js-upload-form');
-    $('#status').text('');
-    $('#progress').text('starting upload...');
+    $('.js-status').text('');
+    $('.js-file-upload-progress').text('starting upload...');
     updateUploadProgress();
   });
 
   var updateUploadProgress = function() {
+    console.log('checking progress...');
     // check upload progess
     $.get('/progress', {'uid': sid}, function(data) {
+      console.log('data'+data);
       if(data.progress < 100) {
-        if(data.progress) $('#progress').text('uploading... ' + data.progress + '%');
+        if(data.progress) $('.js-file-upload-progress').text('uploading... ' + data.progress + '%');
         setTimeout('updateUploadProgress()',500);
         return true;
       }
       // if progress indicates upload complete, file info
-      //getStatus();
+      $('.js-status').text('Upload complete.');
+      $('.js-file-upload-progress').text('');
     }, 'json');
   };
 });

@@ -3,14 +3,16 @@
   <link href="/stylesheets/style.css" rel="stylesheet" type="text/css" />
 </head>
 <body>
-  <form action="/uploads" method="post" enctype="multipart/form-data" class="js-upload-form">
-    <input type="file" name="file" id="file-upload-input"><br/>
-    <input type="submit" value="Upload" id="file-upload-submit">
+  <form action="/uploads" method="post" enctype="multipart/form-data" class="js-upload-form" id="file-upload-form">
+    <input type="file" name="file" class="js-file-upload-input"><br/>
+    <input type="submit" value="Upload" class="js-file-upload-submit">
   </form>
+  <iframe class=".js-upload-target" name="upload-target" src="" style="width:0;height:0;border:0px solid #fff;"></iframe>
+
   
-  <div class="progress" id="file-upload-progress">
+  <div class="progress js-file-upload-progress">
   </div>
-  <div id="status">
+  <div class="status js-status">
   </div >
 
 <script src="/javascripts/lib/jquery.min.js"></script>
