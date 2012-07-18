@@ -21,7 +21,7 @@ module SuperUpload
           File.open(path, "wb") do |file|
             file.write payload
           end
-          file_manager.path = path
+          file_manager.path = path.gsub!('public','')
           file_manager.save
         end
       end

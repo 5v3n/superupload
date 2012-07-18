@@ -9,11 +9,10 @@ $(document).ready(function() {
   });
 
   form.submit(function() {
-    var fileName = 'xyz_' + sid;
     //use hidden iframe for upload
     $('#file-upload-form').attr('target', 'upload-target'); 
     //add sid to action
-    $(this).attr('action', '/uploads?sid=' + sid + '&filename=' + fileName);
+    $(this).attr('action', '/uploads?sid=' + sid);
     $('.js-status').text('');
     $('.js-file-upload-progress').text('starting upload...');
     window.SuperUpload.updateUploadProgress(sid);
