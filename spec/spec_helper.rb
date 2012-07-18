@@ -9,6 +9,8 @@ require 'capybara/dsl'
 require 'capybara/rspec'
 
 RSpec.configure do |conf|
+  ENV["RACK_ENV"] = 'test'
+  
   conf.include Rack::Test::Methods
   conf.include Capybara::DSL
   
