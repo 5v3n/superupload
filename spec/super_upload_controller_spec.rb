@@ -9,14 +9,23 @@ describe 'Super Uploader' do
     follow_redirect!
     last_request.url.should include("/uploads/new")
   end
-  describe "accepts and stores file uploads and" do
-    it "handles valid requests" do
-      filename = "upload.txt"
+  describe "accepts file uploads and" do
+    it "stores the files correctly" do
+      filename = "upload_short.txt"
       post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}")
       full_path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"
       File.exists?(full_path).should be_true
+      file_content_stored = ""
+      File.open(full_path) {|file| file_content = file.read}
+      file_content_origin = ""
+      File.open(full_path) {|file| file_content_origin = file.read}
+      file_content_origin.should == file_content_stored
+    end
+    it "handles valid requests" do
+      filename = "upload.txt"
+      post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}")
       last_response.status.should == 201
-      last_response.header["Location"].should == full_path
+      last_response.header["Location"].should include(filename)
     end
     it "handles invalid requests without paramters" do
       post upload_path

@@ -3,6 +3,7 @@ source :rubygems
 gem 'foreman'
 gem 'unicorn'
 gem 'redis'
+gem 'webrick'
 
 group :test do
   gem 'rspec'
