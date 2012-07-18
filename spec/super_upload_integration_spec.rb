@@ -4,7 +4,7 @@ describe "Super Upload" do
   describe "file upload functionality" do
     let(:upload_path) { '/uploads/new' }
     let(:full_file_path) { File.join("spec/fixtures", "upload.txt") }
-    let(:successful_upload_message){ 'Upload is complete' }
+    let(:successful_upload_message){ 'Upload complete' }
     let(:missing_file_message){ 'Bad Request'}
     before :each do
       visit upload_path

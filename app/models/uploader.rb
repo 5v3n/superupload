@@ -8,15 +8,22 @@ module SuperUpload
       params = CGI.parse(env["QUERY_STRING"])
       sid = params["sid"].first
       total_size = env["CONTENT_LENGTH"].to_i
-      SuperUpload::FileManager.instance.upload_progress[sid] = 0
-      body = stream_read_response env["rack.input"], total_size, sid
-      file_name = parse_for_file_name(body) || sid
-      paylod = parse_for_payload(body, env['CONTENT_TYPE'])
-      path = "#{SuperUpload::UPLOAD_PATH}/#{file_name}"
-      File.open(path, "wb") do |file|
-        file.write paylod
+      content_type = env['CONTENT_TYPE']
+      path = nil
+      if total_size != 0
+        SuperUpload::FileManager.instance.upload_progress[sid] = 0
+        body = stream_read_response env["rack.input"], total_size, sid
+        file_name = parse_for_file_name(body) 
+        file_name ||= sid
+        unless file_name == "" || file_name.nil?
+          paylod = parse_for_payload(body, content_type)
+          path = "#{SuperUpload::UPLOAD_PATH}/#{file_name}"
+          File.open(path, "wb") do |file|
+            file.write paylod
+          end
+          SuperUpload::FileManager.instance.path[sid] = path
+        end
       end
-      SuperUpload::FileManager.instance.path[sid] = path
       return path
     end
 private
@@ -43,10 +50,15 @@ private
       return file_name
     end
     def self.parse_for_payload(body, content_type)
-      boundary = content_type.match(/^multipart\/form-data; boundary=(.+)/)[1]
-      boundary = WEBrick::HTTPUtils::dequote(boundary)
-      form_data =  WEBrick::HTTPUtils::parse_form_data(body, boundary) || {}
-      return form_data["file"]
+      if boundary_array = content_type.match(/^multipart\/form-data; boundary=(.+)/)
+        boundary = content_type.match(/^multipart\/form-data; boundary=(.+)/)[1]
+        boundary = WEBrick::HTTPUtils::dequote(boundary)
+        form_data =  WEBrick::HTTPUtils::parse_form_data(body, boundary) || {}
+        result = form_data["file"]
+      else
+        result = nil
+      end
+      return result 
     end
   end
 end

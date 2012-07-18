@@ -29,11 +29,15 @@ describe 'Super Uploader' do
     end
     it "handles invalid requests without paramters" do
       post upload_path
-      last_response.status.should == 400
-      last_response.header["Warning"].should include(missing_parameters_error_message)
+      last_response.status.should == 409
+      #next level of restfulness:
+      #last_response.status.should == 400
+      #last_response.header["Warning"].should include(missing_parameters_error_message)
       post upload_path, :file => ""
-      last_response.status.should == 400
-      last_response.header["Warning"].should include(missing_parameters_error_message)
+      last_response.status.should == 409
+      #next level of restfulness:
+      #last_response.status.should == 400
+      #last_response.header["Warning"].should include(missing_parameters_error_message)
     end
   end
 end
