@@ -15,7 +15,7 @@ RSpec.configure do |conf|
   conf.include Capybara::DSL
   
   Capybara.javascript_driver = :selenium
-  Capybara.default_wait_time = 10
+  Capybara.default_wait_time = 3
   Capybara.app = eval "Rack::Builder.new {( " + File.read(File.dirname(__FILE__) + '/../config.ru') + "\n )}" 
 
   def app

@@ -20,7 +20,6 @@ describe SuperUpload::FileManager do
     file_manager.path.should            == nil
   end
   describe "uses the given persistency and" do
-    let(:sid){ "43243ewsfdf43"}
     let(:path){ "dfsgfsdg4453/gfbdfg/dgtf.jpg"}
     let(:upload_progress){ "234"}
     let(:total_size){ "43543" }
@@ -28,6 +27,7 @@ describe SuperUpload::FileManager do
       @redis = Redis.new
     end
     it "finds all attributes" do
+      sid = "1"
       @redis.hset SuperUpload::FileManager::PATH, sid, path
       SuperUpload::FileManager.find_path(sid).should == path
       @redis.hset SuperUpload::FileManager::UPLOAD_PROGRESS, sid, upload_progress
@@ -36,14 +36,17 @@ describe SuperUpload::FileManager do
       SuperUpload::FileManager.find_total_size(sid).should == total_size
     end
     it "saves all attributes" do
+      sid = "2"
+      file_manager.sid = sid
       file_manager.save
+      @redis.hget(SuperUpload::FileManager::PATH, sid).should == "path"
+      @redis.hget(SuperUpload::FileManager::TOTAL_SIZE, sid).should == "total_size"
+      @redis.hget(SuperUpload::FileManager::UPLOAD_PROGRESS, sid).should == "upload_progress"
+      sid = "3"
+      SuperUpload::FileManager.new(:sid => sid, :path => path).save
       @redis.hget(SuperUpload::FileManager::PATH, sid).should == path
-      @redis.hget(SuperUpload::FileManager::TOTAL_SIZE, sid).should == total_size
-      @redis.hget(SuperUpload::FileManager::UPLOAD_PROGRESS, sid).should == upload_progress
-      SuperUpload::FileManager.new(:sid => 'sid', :path => path).save
-      @redis.hget(SuperUpload::FileManager::PATH, sid).should == path
-      @redis.hget(SuperUpload::FileManager::TOTAL_SIZE, sid).should == nil
-      @redis.hget(SuperUpload::FileManager::UPLOAD_PROGRESS, sid).should == nil
+      @redis.hget(SuperUpload::FileManager::TOTAL_SIZE, sid).should == ""
+      @redis.hget(SuperUpload::FileManager::UPLOAD_PROGRESS, sid).should == ""
     end
   end
 

@@ -5,7 +5,9 @@ describe SuperUpload::PersistencyManager do
   let(:hash_name){ "hash_name" }
   let(:key){ "key" }
   let(:value){"value"}
-
+  before :all do
+    @redis = Redis.new
+  end
   it "provides one single database connection" do
     redis_instance_one = SuperUpload::PersistencyManager.redis
     redis_instance_two = SuperUpload::PersistencyManager.redis
@@ -13,11 +15,11 @@ describe SuperUpload::PersistencyManager do
   end
   it "saves hashes to the database" do
     SuperUpload::PersistencyManager.save_hash_value(hash_name, key, value)
-    result_value = SuperUpload::PersistencyManager.redis.hget(hash_name, key)
+    result_value = @redis.hget(hash_name, key)
     value.should == result_value
   end
   it "finds hashes in the database" do
-    SuperUpload::PersistencyManager.redis.hset(hash_name, key, value)
+    @redis.hset(hash_name, key, value)
     result_value = SuperUpload::PersistencyManager.find_hash_value(hash_name, key)
     value.should == result_value
   end
