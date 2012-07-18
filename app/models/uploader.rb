@@ -10,32 +10,34 @@ module SuperUpload
       total_size = env["CONTENT_LENGTH"].to_i
       content_type = env['CONTENT_TYPE']
       path = nil
+      file_manager = FileManager.new(:sid => sid, :upload_progress => 0, :total_size => total_size)
       if total_size != 0
-        SuperUpload::FileManager.instance.upload_progress[sid] = 0
-        body = stream_read_response env["rack.input"], total_size, sid
+        body = stream_read_response env["rack.input"], file_manager
         file_name = parse_for_file_name(body) 
         file_name ||= sid
         unless file_name == "" || file_name.nil?
-          paylod = parse_for_payload(body, content_type)
+          payload = parse_for_payload(body, content_type)
           path = "#{SuperUpload::UPLOAD_PATH}/#{file_name}"
           File.open(path, "wb") do |file|
-            file.write paylod
+            file.write payload
           end
-          SuperUpload::FileManager.instance.path[sid] = path
+          file_manager.path = path
+          file_manager.save
         end
       end
       return path
     end
 private
-    def self.stream_read_response(input, total_size, sid)
+    def self.stream_read_response(input, file_manager)
       body = ""
       current_position = 0
+      total_size = file_manager.total_size
       while chunk = input.read(SuperUpload::BUFFER_SIZE)
         body << chunk
         current_position += SuperUpload::BUFFER_SIZE
         progress = (( (1.0 * current_position) / total_size) * 100).to_i
-        SuperUpload::FileManager.instance.upload_progress[sid] = progress
-        SuperUpload::FileManager.instance.persist
+        file_manager.upload_progress = progress
+        file_manager.save
         puts "#{current_position} / #{total_size} = #{progress}"
       end
       return body

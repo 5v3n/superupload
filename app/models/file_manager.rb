@@ -1,28 +1,26 @@
 require 'singleton'
-require 'redis'
+require './app/models/persistency_manager.rb'
 
 module SuperUpload
   class FileManager
-    include Singleton
-    attr_accessor :upload_progress, :path
-    def upload_progress
-      @upload_progress || @upload_progress = {}
+    include PersistencyManager
+    attr_accessor :upload_progress, :total_size, :path, :sid
+    def initialize(options = {})
+      self.sid              = options[:sid]
+      self.upload_progress  = options[:upload_progress]
+      self.total_size       = options[:total_size]
+      self.path             = options[:path]
     end
-    def path
-      @path || @path = {}
+    def self.find_path(sid)
+      PersistencyManager.find_hash_value "path", sid
     end
-    def redis
-      @redis || @redis = (SuperUpload::REDIS_URI && Redis.new(:host => SuperUpload::REDIS_URI.host, :port => SuperUpload::REDIS_URI.port, :password => SuperUpload::REDIS_URI.password)) || Redis.new
+    def self.find_upload_progress(sid)
+      PersistencyManager.find_hash_value "upload_progress", sid
     end
-    def persist
-      self.path.each            {|key, value| self.redis.hset("path", key, value) }
-      self.upload_progress.each {|key, value| self.redis.hset("upload_progress", key, value)}
-    end
-    def find_path(sid)
-      self.redis.hget "path", sid
-    end
-    def find_upload_progress(sid)
-      self.redis.hget "upload_progress", sid
+    def save
+      PersistencyManager.save_hash_value "upload_progress", @sid, @upload_progress
+      PersistencyManager.save_hash_value "total_size", @sid, @total_size
+      PersistencyManager.save_hash_value "path", @sid, @path
     end
   end
 end

@@ -11,19 +11,19 @@ describe 'Super Uploader' do
   end
   describe "accepts file uploads and" do
     it "stores the files correctly" do
-      filename = "upload_short.txt"
-      post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}")
+      filename = "upload.txt"
+      post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}"),
+                        :content_type => 'multipart/form-data'
       full_path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"
       File.exists?(full_path).should be_true
-      file_content_stored = ""
-      File.open(full_path) {|file| file_content = file.read}
-      file_content_origin = ""
-      File.open(full_path) {|file| file_content_origin = file.read}
+      file_content_origin = File.read("spec/fixtures/#{filename}") 
+      file_content_stored = File.read(full_path)
       file_content_origin.should == file_content_stored
     end
     it "handles valid requests" do
       filename = "upload.txt"
-      post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}")
+      post upload_path, :file => Rack::Test::UploadedFile.new("spec/fixtures/#{filename}"),
+                        :content_type => 'multipart/form-data'
       last_response.status.should == 201
       last_response.header["Location"].should include(filename)
     end

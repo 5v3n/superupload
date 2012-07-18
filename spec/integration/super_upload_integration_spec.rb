@@ -17,7 +17,7 @@ The response to the form post request should display both the title and the path
 describe "Super Upload" do
   describe "file upload functionality" do
     let(:upload_path) { '/uploads/new' }
-    let(:full_file_path) { File.join("spec/fixtures", "upload.txt") }
+    let(:full_file_path) { File.join("spec/fixtures", "upload_shor.txt") }
     let(:successful_upload_message){ 'Upload complete' }
     let(:missing_file_message){ 'Bad Request'}
     before :each do
@@ -26,7 +26,7 @@ describe "Super Upload" do
 
     it "indicates a succesfully completed upload", :js => :true do
       #attach_file("file", full_file_path) #won't help in non-headless selenium mode...
-      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload.txt", './'))
+      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
       #click_button("Upload")
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
