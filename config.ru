@@ -32,7 +32,7 @@ map '/progress' do
     query_hash = CGI.parse(env["QUERY_STRING"])
     sid = query_hash["sid"].first if query_hash["sid"]
     p sid
-    progress = SuperUpload::FileManager.instance.upload_progress[sid] || 0 #(1..10).collect { |e| e*10 }.shuffle.first#
+    progress = SuperUpload::FileManager.instance.find_upload_progress(sid) || 0 #(1..10).collect { |e| e*10 }.shuffle.first#
     p progress
     [200, {"Content-Type" => "application/json"}, ["{\"progress\": #{progress}}"] ] 
   }

@@ -21,10 +21,8 @@ $(document).ready(function() {
 });
 
 window.SuperUpload.updateUploadProgress = function(sid) {
-    console.log('checking progress for sid ' + sid + '...');
     // check upload progess
     $.get('/progress?sid=' + sid, function(data) {
-      console.log(data);
       var progress = data.progress || 0
       if(progress < 100) {
         if(progress) $('.js-file-upload-progress').text('uploading... ' + progress + '%');

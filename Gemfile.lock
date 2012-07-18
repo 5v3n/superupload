@@ -25,6 +25,7 @@ GEM
     rack-test (0.6.1)
       rack (>= 1.0)
     raindrops (0.10.0)
+    redis (3.0.1)
     rspec (2.11.0)
       rspec-core (~> 2.11.0)
       rspec-expectations (~> 2.11.0)
@@ -56,6 +57,7 @@ DEPENDENCIES
   capybara
   foreman
   rack-test
+  redis
   rspec
   shotgun
   unicorn

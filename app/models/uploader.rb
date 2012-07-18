@@ -20,6 +20,7 @@ module SuperUpload
         current_position += SuperUpload::BUFFER_SIZE
         progress = (( (1.0 * current_position) / total_size) * 100).to_i
         SuperUpload::FileManager.instance.upload_progress[sid] = progress
+        SuperUpload::FileManager.instance.persist
         puts "#{current_position} / #{total_size} = #{progress}"
       end
       path = "#{SuperUpload::UPLOAD_PATH}/#{filename}"

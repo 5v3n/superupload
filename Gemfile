@@ -2,6 +2,7 @@ source :rubygems
 
 gem 'foreman'
 gem 'unicorn'
+gem 'redis'
 
 group :test do
   gem 'rspec'
