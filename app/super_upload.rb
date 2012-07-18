@@ -5,7 +5,7 @@ require "./lib/monkey_patches.rb"
 
 module SuperUpload
   UPLOAD_PATH = 'public/uploads/files'
-  BUFFER_SIZE = 4096
+  BUFFER_SIZE = ENV["BUFFER_SIZE"] && ENV["BUFFER_SIZE"].to_i || 4096 #Smaller buffer means slower processing. Ideal for development...
   ERROR_MESSAGES = {
       :missing_parameters => 'Missing parameter(s)'
     }
