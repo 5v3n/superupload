@@ -7,6 +7,7 @@ describe SuperUpload::PersistencyManager do
   let(:value){"value"}
   before :all do
     @redis = Redis.new
+    @redis.flushdb
   end
   it "provides one single database connection" do
     redis_instance_one = SuperUpload::PersistencyManager.redis

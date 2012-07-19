@@ -25,6 +25,7 @@ describe SuperUpload::FileManager do
     let(:total_size){ "43543" }
     before :all do
       @redis = Redis.new
+      @redis.flushdb
     end
     it "finds all attributes" do
       sid = "1"
