@@ -22,6 +22,20 @@ map '/uploads' do
   end
 end
 
+map '/comments/' do
+  run Proc.new { |env| 
+    if env["REQUEST_METHOD"] == "POST"
+      request = Rack::Request.new env
+      query_hash = CGI.parse(env["QUERY_STRING"])
+      sid = query_hash["sid"].first if query_hash["sid"]
+      path = SuperUpload::FileManager.find_path(sid)
+      title = path.split('/').last
+      comment = request.params["comment"]
+      [201, {"Content-Type" => "text/html", "Location" => path }, [%|Thanks for submitting #{title} - it's stored at <a href="#{path}">#{path}</a>. You were all like: "#{comment}"|] ]
+    end
+  }
+end
+
 map '/' do
   run Proc.new {|env| [ 302, {'Content-Type' => 'text/html', 'Location'=> '/uploads/new' }, [] ] }
 end

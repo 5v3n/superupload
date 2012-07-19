@@ -20,10 +20,32 @@ describe "Super Upload" do
     let(:full_file_path) { File.join("spec/fixtures", "upload_shor.txt") }
     let(:successful_upload_message){ 'Status: 100%.' }
     let(:missing_file_message){ 'Bad Request'}
+    let(:upload_comment){"Woah! This rocks dude!!1!!"}
     before :each do
       visit upload_path
     end
     describe "offers a text form that", :js => true do
+      it "dispays the link to the uploaded file after submit" do
+        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        wait_until { page.has_content?(successful_upload_message) == true}
+        fill_in 'comment', :with => upload_comment
+        find('.js-comment-submit').click()
+        page.should have_content upload_comment
+      end
+      it "dispays the title of the uploaded file after submit" do
+        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        wait_until { page.has_content?(successful_upload_message) == true}
+        fill_in 'comment', :with => upload_comment
+        find('.js-comment-submit').click()
+        page.should have_content "upload_short.txt"
+      end
+      it "dispays the path of the uploaded file after submit" do
+        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        wait_until { page.has_content?(successful_upload_message) == true}
+        fill_in 'comment', :with => upload_comment
+        find('.js-comment-submit').click()
+        page.should have_content "/uploads/files/upload_short.txt"
+      end
       it "doesnt show itself before the upload completes" do
         find(".js-comment-form").should_not be_visible
       end
@@ -32,12 +54,6 @@ describe "Super Upload" do
         find(".js-comment-form").should_not be_visible
         wait_until { page.has_content?(successful_upload_message) == true}
         find(".js-comment-form").should be_visible
-      end
-      it "dispays the link to the uploaded file after submit" do
-      end
-      it "dispays the title of the uploaded file after submit" do
-      end
-      it "dispays the path of the uploaded file after submit" do
       end
     end
     it "indicates a succesfully completed upload", :js => :true do
