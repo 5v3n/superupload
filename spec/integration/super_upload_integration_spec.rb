@@ -18,7 +18,7 @@ describe "Super Upload" do
   describe "file upload functionality" do
     let(:upload_path) { '/uploads/new' }
     let(:full_file_path) { File.join("spec/fixtures", "upload_shor.txt") }
-    let(:successful_upload_message){ 'Upload complete' }
+    let(:successful_upload_message){ 'Status: 100%.' }
     let(:missing_file_message){ 'Bad Request'}
     before :each do
       visit upload_path
@@ -27,11 +27,14 @@ describe "Super Upload" do
     it "indicates a succesfully completed upload", :js => :true do
       #attach_file("file", full_file_path) #won't help in non-headless selenium mode...
       find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
-      #click_button("Upload")
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
     end
     it "offers a text form when the upload started"
-    it "shows the file path after uploading"
+    it "shows the file path after uploading", :js => true do
+      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+      wait_until { page.has_link?("Find it here.") == true}
+      page.should have_link("Find it here.")
+    end
   end
 end

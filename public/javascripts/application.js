@@ -13,8 +13,7 @@ $(document).ready(function() {
     $('#file-upload-form').attr('target', 'upload-target'); 
     //add sid to action
     $(this).attr('action', '/uploads?sid=' + sid);
-    $('.js-status').text('');
-    $('.js-file-upload-progress').text('starting upload...');
+    $('.js-status').text('starting upload...');
     window.SuperUpload.updateUploadProgress(sid);
   });
 });
@@ -24,12 +23,11 @@ window.SuperUpload.updateUploadProgress = function(sid) {
     $.get('/progress?sid=' + sid, function(data) {
       var progress = data.progress || 0
       if(progress < 100) {
-        if(progress) $('.js-file-upload-progress').text('uploading... ' + progress + '%');
+        if(progress) $('.js-status').text('Status: ' + progress + '%.');
         setTimeout('window.SuperUpload.updateUploadProgress('+sid+')',500);
         return true;
       }
       // if progress indicates upload complete, file info
-      $('.js-status').text('Upload complete.');
-      $('.js-file-upload-progress').text('');
+      $('.js-status').html('Status: 100%. <a href="'+data.path+'">Find it here.</a>');
     }, 'json');
   };

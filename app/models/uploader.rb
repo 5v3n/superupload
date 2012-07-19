@@ -38,7 +38,7 @@ private
         progress = (( (1.0 * current_position) / total_size) * 100).to_i
         file_manager.upload_progress = progress
         file_manager.save
-        puts "#{current_position} / #{total_size} = #{progress}"
+        #puts "#{current_position} / #{total_size} = #{progress}"
       end
       return body
     end
