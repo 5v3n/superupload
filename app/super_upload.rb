@@ -15,4 +15,44 @@ module SuperUpload
     }
   REDIS_URI = nil
   REDIS_URI = URI.parse(ENV["REDISTOGO_URL"]) if ENV["REDISTOGO_URL"]
+
+  class App
+    attr_accessor :app
+    def initialize
+      @app = Rack::Builder.new do
+        map '/uploads' do
+        map '/' do
+          run Proc.new { |env| 
+            if env["REQUEST_METHOD"] == "POST"
+              SuperUpload::UploadsController.create env
+            end
+          }
+        end
+        map '/new' do
+          run Proc.new {|env| [200, {"Content-Type" => "text/html"}, ::File.open('app/views/new.erb') ] }
+          end
+        end
+
+        map '/comments/' do
+          run Proc.new { |env| 
+            if env["REQUEST_METHOD"] == "POST"
+              SuperUpload::CommentsController.create env
+            end
+          }
+        end
+
+        map '/' do
+          run Proc.new {|env| [ 302, {'Content-Type' => 'text/html', 'Location'=> '/uploads/new' }, [] ] }
+        end
+
+        map '/progress' do
+          run Proc.new {|env| SuperUpload::ProgressController.show env  }
+        end
+      end
+    end
+
+    def call(env)
+      @app.call(env)
+    end
+  end
 end
