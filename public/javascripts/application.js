@@ -27,17 +27,18 @@ $(document).ready(function() {
         else{
           $('.js-status').html('Status: 100%. <a href="'+data.path+'">Find it here.</a>');
           clearInterval(interval);
+          commentForm.show();
         }
       })
     }, 1000);
   });
 
   uploadForm.submit(function() {
-    commentForm.show();
     //use hidden iframe for upload
     $(this).attr('target', 'upload-target'); 
     //add sid to action
     $(this).attr('action', '/uploads?sid=' + sid);
+    commentForm.attr('action', '/comments?sid=' + sid);
     $('.js-status').text('starting upload...');
   });
 });

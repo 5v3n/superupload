@@ -23,21 +23,28 @@ describe "Super Upload" do
     before :each do
       visit upload_path
     end
-
+    describe "offers a text form that", :js => true do
+      it "doesnt show itself before the upload completes" do
+        find(".js-comment-form").should_not be_visible
+      end
+      it "shows itself when the upload completes", :js => true do
+        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        find(".js-comment-form").should_not be_visible
+        wait_until { page.has_content?(successful_upload_message) == true}
+        find(".js-comment-form").should be_visible
+      end
+      it "dispays the link to the uploaded file after submit" do
+      end
+      it "dispays the title of the uploaded file after submit" do
+      end
+      it "dispays the path of the uploaded file after submit" do
+      end
+    end
     it "indicates a succesfully completed upload", :js => :true do
       #attach_file("file", full_file_path) #won't help in non-headless selenium mode...
       find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
-    end
-    describe "offers a text form when", :js => true do
-      it "not showing it before the upload starts" do
-        find(".js-comment-form").should_not be_visible
-      end
-      it "showing it when the upload starts", :js => true do
-        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
-        find(".js-comment-form").should be_visible
-      end
     end
     it "shows the file path after uploading", :js => true do
       find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
