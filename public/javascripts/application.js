@@ -19,7 +19,7 @@ $(document).ready(function() {
   $('.js-file-upload-input').on('change', function(){
     uploadForm.submit();
     interval = setInterval(function(){
-      $.getJSON('/progress?sid=' + sid, function(data) {
+      $.getJSON('/progress?sid=' + sid + '&internetExplorerMustDie=' + window.SuperUpload.genereateSid(), function(data) {
         var progress = data.progress;
         if(progress < 100) {
           $('.js-status').text('Status: ' + progress + '%.');

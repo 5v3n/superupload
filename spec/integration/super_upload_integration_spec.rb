@@ -17,7 +17,7 @@ The response to the form post request should display both the title and the path
 describe "Super Upload" do
   describe "file upload functionality" do
     let(:upload_path) { '/uploads/new' }
-    let(:full_file_path) { File.join("spec/fixtures", "upload_shor.txt") }
+    let(:full_file_path) { File.join("spec/fixtures", "upload_short.txt") }
     let(:successful_upload_message){ 'Status: 100%.' }
     let(:missing_file_message){ 'Bad Request'}
     let(:upload_comment){"Woah! This rocks dude!!1!!"}
