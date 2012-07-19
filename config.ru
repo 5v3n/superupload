@@ -18,7 +18,7 @@ map '/uploads' do
     }
   end
   map '/new' do
-    run Proc.new {|env| [200, {"Content-Type" => "text/html"}, ::File.open('app/views/new.erb') ] }
+    run Proc.new {|env| [200, {"Content-Type" => "text/html"}, ::File.open('app/views/upload/new.erb') ] }
   end
 end
 
