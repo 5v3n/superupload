@@ -2,8 +2,7 @@
 
 ## ...and the world of file uploads will probably never be the same again.
 
-Using [sinatra](https://github.com/sinatra/sinatra/) for routing & rendering server side.
-
-Using @malsup 's [form](https://github.com/malsup/form) library to take care of unobstrusive javascript client side.
-
-Thinking about writing a progress indicating backend function in sinatra... Let's see how fast I am...
+- Use [superuploader.5v3n.com](http://superuploader.5v3n.com) to click though
+- Use `foreman start` to run the server locally on port 5000
+- Use `rspec spec` to run the specs
+- Use @5v3n for any questions ;-)
