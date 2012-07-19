@@ -30,7 +30,15 @@ describe "Super Upload" do
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
     end
-    it "offers a text form when the upload started"
+    describe "offers a text form when", :js => true do
+      it "not showing it before the upload starts" do
+        find(".js-comment-form").should_not be_visible
+      end
+      it "showing it when the upload starts", :js => true do
+        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        find(".js-comment-form").should be_visible
+      end
+    end
     it "shows the file path after uploading", :js => true do
       find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
       wait_until { page.has_link?("Find it here.") == true}

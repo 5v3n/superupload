@@ -1,12 +1,15 @@
 window.SuperUpload = window.SuperUpload || {};
 
 $(document).ready(function() {
-  var form = $('.js-upload-form');
+  var uploadForm = $('.js-upload-form');
+  var commentForm = $('.js-comment-form');
   var sid = new Date().getTime();
   var interval = null;
+
+  commentForm.hide();
   //submit form when file has been selected
   $('.js-file-upload-input').on('change', function(){
-    form.submit();
+    uploadForm.submit();
     interval = setInterval(function(){
       $.getJSON('/progress?sid=' + sid, function(data) {
         var progress = data.progress;
@@ -21,9 +24,10 @@ $(document).ready(function() {
     }, 1000);
   });
 
-  form.submit(function() {
+  uploadForm.submit(function() {
+    commentForm.show();
     //use hidden iframe for upload
-    $('#file-upload-form').attr('target', 'upload-target'); 
+    $(this).attr('target', 'upload-target'); 
     //add sid to action
     $(this).attr('action', '/uploads?sid=' + sid);
     $('.js-status').text('starting upload...');
