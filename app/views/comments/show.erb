@@ -10,17 +10,9 @@
   <div class="container">
       <div class="hero-unit">
         <h1>SuperUpload</h1>
-        <div class="file-upload">
-          <form action="/uploads" method="post" enctype="multipart/form-data" class="js-upload-form">
-            <input type="file" name="file" class="js-file-upload-input file-upload-input">
-          </form>
-          <div class="js-status"></div>
-        </div >
-        <div class="file-upload-comment">
-          <form action="/comments" method="post" enctype="multipart/form-data" class="js-comment-form">
-            <textarea name="comment" rows="5" class="js-comment-input comment-input"></textarea>
-            <input type="submit" value="Save" name="comment-submit" class="js-comment-submit comment-submit btn">
-          </form>
+        <h3>Thanks for submitting <%= comment[:title] %>.</h3>
+        <h4>It's stored at <a href="<%= comment[:path] %>"><%= comment[:path] %></a>.</h4> 
+        <h2>You were all like: "<%= comment[:text] %>"</h2>
         </div>
     </div>
   </div>

@@ -64,8 +64,8 @@ describe "Super Upload" do
     end
     it "shows the file path after uploading", :js => true do
       find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
-      wait_until { page.has_link?("Find it here.") == true}
-      page.should have_link("Find it here.")
+      wait_until { page.has_link?("Uploaded to here.") == true}
+      page.should have_link("Uploaded to here.", :href => "/uploads/files/upload_short.txt")
     end
   end
 end

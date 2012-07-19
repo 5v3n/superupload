@@ -1,8 +1,11 @@
+require 'erb'
+
 module SuperUpload
   module CommentsController
     def self.create(env)
       comment = SuperUpload::Comment.generate env
-      [200, {"Content-Type" => "text/html" }, [%|Thanks for submitting #{comment[:title]} - it's stored at <a href="#{comment[:path]}">#{comment[:path]}</a>. You were all like: "#{comment[:text]}"|] ]
+      template = ERB.new(File.read('./app/views/comments/show.erb'))
+      [200, {"Content-Type" => "text/html"}, [template.result(binding)]]
     end
   end
 end

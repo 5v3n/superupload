@@ -25,7 +25,7 @@ $(document).ready(function() {
           $('.js-status').text('Status: ' + progress + '%.');
         }
         else{
-          $('.js-status').html('Status: 100%. <a href="'+data.path+'">Find it here.</a>');
+          $('.js-status').html('Status: 100%. <a href="'+data.path+'">Uploaded to here.</a>');
           clearInterval(interval);
           commentForm.show();
         }
