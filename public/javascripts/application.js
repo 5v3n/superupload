@@ -24,7 +24,7 @@ window.SuperUpload.updateUploadProgress = function(sid) {
       var progress = data.progress || 0
       if(progress < 100) {
         if(progress) $('.js-status').text('Status: ' + progress + '%.');
-        setTimeout('window.SuperUpload.updateUploadProgress('+sid+')',500);
+        setTimeout(function(){window.SuperUpload.updateUploadProgress(sid)},500);
         return true;
       }
       // if progress indicates upload complete, file info
