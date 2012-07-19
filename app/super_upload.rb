@@ -13,6 +13,9 @@ module SuperUpload
   ERROR_MESSAGES = {
       :missing_parameters => 'Missing parameter(s)'
     }
-  REDIS_URI = nil
-  REDIS_URI = URI.parse(ENV["REDISTOGO_URL"]) if ENV["REDISTOGO_URL"]
+  if ENV["REDISTOGO_URL"]
+    REDIS_URI = URI.parse(ENV["REDISTOGO_URL"]) 
+  else
+    REDIS_URI = nil
+  end
 end
