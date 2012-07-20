@@ -19,7 +19,7 @@ module SuperUpload
   class App
     attr_accessor :app
     def initialize
-      @app = Rack::Builder.new do
+      @app = Rack::Builder.new {
         map '/uploads' do
         map '/' do
           run Proc.new { |env| 
@@ -48,7 +48,7 @@ module SuperUpload
         map '/progress' do
           run Proc.new {|env| SuperUpload::ProgressController.show env  }
         end
-      end
+      }
     end
 
     def call(env)
