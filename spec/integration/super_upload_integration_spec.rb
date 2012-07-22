@@ -26,21 +26,21 @@ describe "Super Upload" do
     end
     describe "offers a text form that", :js => true do
       it "dispays the link to the uploaded file after submit" do
-        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        attach_file("file", full_file_path) #won't help in non-headless selenium mode...
         wait_until { page.has_content?(successful_upload_message) == true}
         fill_in 'comment', :with => upload_comment
         find('.js-comment-submit').click()
         page.should have_content upload_comment
       end
       it "dispays the title of the uploaded file after submit" do
-        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        attach_file("file", full_file_path) #won't help in non-headless selenium mode...
         wait_until { page.has_content?(successful_upload_message) == true}
         fill_in 'comment', :with => upload_comment
         find('.js-comment-submit').click()
         page.should have_content "upload_short.txt"
       end
       it "dispays the path of the uploaded file after submit" do
-        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        attach_file("file", full_file_path) #won't help in non-headless selenium mode...
         wait_until { page.has_content?(successful_upload_message) == true}
         fill_in 'comment', :with => upload_comment
         find('.js-comment-submit').click()
@@ -50,20 +50,20 @@ describe "Super Upload" do
         find(".js-comment-form").should_not be_visible
       end
       it "shows itself when the upload completes", :js => true do
-        find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+        attach_file("file", full_file_path) #won't help in non-headless selenium mode...
         find(".js-comment-form").should_not be_visible
         wait_until { page.has_content?(successful_upload_message) == true}
         find(".js-comment-form").should be_visible
       end
     end
     it "indicates a succesfully completed upload", :js => :true do
-      #attach_file("file", full_file_path) #won't help in non-headless selenium mode...
-      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+      attach_file("file", full_file_path) #won't help in non-headless selenium mode...
+      #find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
       wait_until { page.has_content?(successful_upload_message) == true}
       page.should have_content(successful_upload_message)
     end
     it "shows the file path after uploading", :js => true do
-      find(".js-file-upload-input").native.send_keys(File.expand_path("spec/fixtures/upload_short.txt", './'))
+      attach_file("file", full_file_path) #won't help in non-headless selenium mode...
       wait_until { page.has_link?("Uploaded to here.") == true}
       page.should have_link("Uploaded to here.", :href => "/uploads/files/upload_short.txt")
     end
