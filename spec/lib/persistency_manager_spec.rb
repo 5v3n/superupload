@@ -1,5 +1,5 @@
 require 'spec_helper'
-require './app/models/persistency_manager.rb'
+require './lib/persistency_manager.rb'
 
 describe SuperUpload::PersistencyManager do
   let(:hash_name){ "hash_name" }

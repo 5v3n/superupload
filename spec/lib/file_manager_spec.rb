@@ -1,5 +1,5 @@
 require 'spec_helper'
-require './app/models/file_manager.rb'
+require './lib/file_manager.rb'
 
 describe SuperUpload::FileManager do
   let(:file_manager){ SuperUpload::FileManager.new(

@@ -1,5 +1,4 @@
-require 'singleton'
-require './app/models/persistency_manager.rb'
+require 'persistency_manager'
 
 module SuperUpload
   class FileManager

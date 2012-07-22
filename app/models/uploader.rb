@@ -1,4 +1,4 @@
-require './app/models/file_manager.rb'
+require './lib/file_manager.rb'
 require 'cgi'
 require 'webrick'
 
