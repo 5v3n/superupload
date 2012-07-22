@@ -10,16 +10,16 @@ require 'capybara/rspec'
 
 RSpec.configure do |conf|
   ENV["RACK_ENV"] = 'test'
-  
+
   conf.include Rack::Test::Methods
   conf.include Capybara::DSL
   
   Capybara.javascript_driver = :selenium
   Capybara.default_wait_time = 3
-  Capybara.app = eval "Rack::Builder.new {( " + File.read(File.dirname(__FILE__) + '/../config.ru') + "\n )}" 
+  Capybara.app = SuperUpload::App.new
 
   def app
-    eval "Rack::Builder.new {( " + File.read(File.dirname(__FILE__) + '/../config.ru') + "\n )}"
+    SuperUpload::App.new
   end
 
 end
